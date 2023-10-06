@@ -3,35 +3,44 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/bouroo/one2n-go-bootcamp/basic-number-filtering/utils"
 )
 
 func main() {
+	MainIO(os.Stdin, os.Stdout)
+}
+
+func MainIO(input io.Reader, output io.Writer) {
 	// Prompt the user for input
 	fmt.Print("Sample Input: ")
 
-	// Read the input from the user
-	input := bufio.NewScanner(os.Stdin)
+	// Create a new scanner to read input from the user
+	inputScanner := bufio.NewScanner(input)
+	inputScanner.Scan()
 
-	// Read the user's input
-	input.Scan()
+	// Extract the numbers from the input using a utility function
+	numbers := utils.ExtractIntegers(inputScanner.Text())
 
-	// Extract the numbers from the input
-	numbers := utils.ExtractNumbers(input.Text())
-
-	// Filter out odd numbers
+	// Filter the numbers by keeping only the odd ones using a utility function
 	result := utils.Filter(numbers, utils.IsOdd)
 
-	// Filter out numbers that are not multiples of three
+	// Filter the numbers by keeping only the multiples of 3 ones using a utility function
 	result = utils.Filter(result, IsMultipleByThree)
 
-	// Filter out numbers that are not greater than ten
+	// Filter the numbers by keeping only the numbers greater than 10 using a utility function
 	result = utils.Filter(result, IsGreatherThanTen)
 
-	// Print the output
-	fmt.Printf("Sample Output: %s\n", utils.OutputString(result))
+	// Create a buffered writer to write the output
+	outputWriter := bufio.NewWriter(output)
+
+	// Flush the buffered writer to ensure all data is written to the output
+	defer outputWriter.Flush()
+
+	// Write the output header and output string
+	outputWriter.WriteString("Sample Output: " + utils.OutputString(result) + "\n")
 }
 
 // IsMultipleByThree checks if a given number is a multiple of three.

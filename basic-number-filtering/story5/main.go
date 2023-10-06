@@ -3,41 +3,52 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/bouroo/one2n-go-bootcamp/basic-number-filtering/utils"
 )
 
 func main() {
+	MainIO(os.Stdin, os.Stdout)
+}
+
+func MainIO(input io.Reader, output io.Writer) {
 	// Prompt the user for input
 	fmt.Print("Sample Input: ")
 
-	// Create a new scanner to read user input from the standard input
-	input := bufio.NewScanner(os.Stdin)
+	// Create a new scanner to read input from the user
+	inputScanner := bufio.NewScanner(input)
+	inputScanner.Scan()
 
-	// Read the user's input
-	input.Scan()
+	// Extract the numbers from the input using a utility function
+	numbers := utils.ExtractIntegers(inputScanner.Text())
 
-	// Extract numbers from the user input
-	numbers := utils.ExtractNumbers(input.Text())
-
-	// Filter the numbers to keep only the even ones
+	// Filter the numbers by keeping only the even ones using a utility function
 	result := utils.Filter(numbers, utils.IsEven)
 
-	// Filter the result again to keep only the numbers that are multiples of five
+	// Filter the numbers by keeping only the multiples of 5 ones using a utility function
 	result = utils.Filter(result, IsMultipleByFive)
 
-	// Print the sample output
-	fmt.Printf("Sample Output: %s\n", utils.OutputString(result))
+	// Create a buffered writer to write the output
+	outputWriter := bufio.NewWriter(output)
+
+	// Flush the buffered writer to ensure all data is written to the output
+	defer outputWriter.Flush()
+
+	// Write the output header and output string
+	outputWriter.WriteString("Sample Output: " + utils.OutputString(result) + "\n")
 }
 
 // IsMultipleByFive checks if the given number is a multiple of five.
 //
 // Parameters:
-//   number - an integer to check
+//
+//	number - an integer to check
 //
 // Returns:
-//   bool - true if the number is a multiple of five, false otherwise.
+//
+//	bool - true if the number is a multiple of five, false otherwise.
 func IsMultipleByFive(number int) bool {
 	return number%5 == 0
 }

@@ -14,11 +14,11 @@ type Number interface {
 
 type FilterFn[T Number] func(number T) bool
 
-// ExtractNumbers extracts numbers from a comma-separated string.
+// ExtractIntegers extracts numbers from a comma-separated string.
 //
 // The input parameter is a string that contains comma-separated numbers.
 // The function returns a slice of integers.
-func ExtractNumbers(input string) (numbers []int) {
+func ExtractIntegers(input string) (numbers []int) {
 	// Split the input string by comma and store the resulting substrings in the 'nums' slice.
 	nums := strings.Split(input, ",")
 
@@ -42,7 +42,7 @@ func ExtractNumbers(input string) (numbers []int) {
 //
 // number: an integer that needs to be checked.
 // bool: true if the number is even, false otherwise.
-func IsEven(number int) bool {
+func IsEven[T Number](number T) bool {
 	return int(number)%2 == 0
 }
 
@@ -50,7 +50,7 @@ func IsEven(number int) bool {
 //
 // number: an integer number.
 // Returns: a boolean value indicating if the number is odd.
-func IsOdd(number int) bool {
+func IsOdd[T Number](number T) bool {
 	return int(number)%2 != 0
 }
 
@@ -58,7 +58,7 @@ func IsOdd(number int) bool {
 //
 // number: an integer number to be checked.
 // returns: a boolean indicating whether the number is prime or not.
-func IsPrime(number int) bool {
+func IsPrime[T Number](number T) bool {
 	// Check if the number is less than 2, which is not a prime number.
 	if number < 2 {
 		return false
@@ -81,7 +81,7 @@ func IsPrime(number int) bool {
 // numbers: The list of numbers to be filtered.
 // filterFn: The filter function that determines whether a number should be included in the filtered list.
 // filteredNumbers: The list of numbers that pass the filter.
-func Filter[T Number](numbers []int, filterFn FilterFn[T]) (filteredNumbers []int) {
+func Filter[T Number](numbers []T, filterFn FilterFn[T]) (filteredNumbers []T) {
 	// Iterate over each number in the numbers list.
 	for _, number := range numbers {
 		// Check if the number passes the filter function.

@@ -35,7 +35,7 @@ func TestExtractNumber(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		result := utils.ExtractNumbers(test.input)
+		result := utils.ExtractIntegers(test.input)
 		assert.Equal(t, test.expected, result)
 	}
 }

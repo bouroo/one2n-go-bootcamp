@@ -7,7 +7,12 @@ import (
 	"os"
 
 	"github.com/bouroo/one2n-go-bootcamp/basic-number-filtering/utils"
+	"golang.org/x/exp/constraints"
 )
+
+type Number interface {
+	constraints.Integer | constraints.Float
+}
 
 func main() {
 	MainIO(os.Stdin, os.Stdout)
@@ -22,7 +27,7 @@ func MainIO(input io.Reader, output io.Writer) {
 	inputScanner.Scan()
 
 	// Extract the numbers from the input using a utility function
-	numbers := utils.ExtractNumbers(inputScanner.Text())
+	numbers := utils.ExtractIntegers(inputScanner.Text())
 
 	// Filter the numbers by keeping only the even ones using a utility function
 	result := utils.Filter(numbers, utils.IsEven)
