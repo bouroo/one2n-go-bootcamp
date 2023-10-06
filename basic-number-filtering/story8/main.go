@@ -38,7 +38,7 @@ func MainIO(input io.Reader, output io.Writer) {
 	conditions := ExtractConditions[int](conditionsText)
 
 	// Filter the numbers by keeping only the odd ones using a utility function
-	result := utils.FilterAll(numbers, conditions...)
+	result := utils.FilterAny(numbers, conditions...)
 
 	// Create a buffered writer to write the output
 	writer := bufio.NewWriter(output)

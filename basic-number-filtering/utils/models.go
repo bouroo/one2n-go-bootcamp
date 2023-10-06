@@ -74,7 +74,7 @@ func (n *NumberStore[T]) LessThanFilter(lessThan int) *NumberStore[T] {
 }
 
 func (n *NumberStore[T]) FilterAll(filterFn ...FilterFn[T]) *NumberStore[T] {
-	tmpResult := &NumberStore[T]{}
+	tmpResult := new(NumberStore[T])
 numLoop:
 	for _, num := range n.Numbers {
 		var tmpNum T
@@ -90,7 +90,7 @@ numLoop:
 	return n
 }
 func (n *NumberStore[T]) FilterAny(filterFn ...FilterFn[T]) *NumberStore[T] {
-	tmpResult := &NumberStore[T]{}
+	tmpResult := new(NumberStore[T])
 	for _, num := range n.Numbers {
 		var tmpNum T
 	filterLoop:

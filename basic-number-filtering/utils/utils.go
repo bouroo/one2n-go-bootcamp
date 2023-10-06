@@ -3,8 +3,10 @@ package utils
 import (
 	"fmt"
 	"math"
+	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 
 	"golang.org/x/exp/constraints"
 )
@@ -14,6 +16,15 @@ type Number interface {
 }
 
 type FilterFn[T Number] func(number T) bool
+
+var RegNumPool = sync.Pool{
+	New: func() any {
+		// The Pool's New function should generally only return pointer
+		// types, since a pointer can be put into the return interface
+		// value without an allocation:
+		return regexp.MustCompile(`\d+`)
+	},
+}
 
 // ExtractIntegers extracts numbers from a comma-separated string.
 //
@@ -52,7 +63,7 @@ func IsEven[T Number](number T) bool {
 // number: an integer number.
 // Returns: a boolean value indicating if the number is odd.
 func IsOdd[T Number](number T) bool {
-	return math.Mod(float64(number), 2) == 1
+	return math.Mod(float64(number), 2) != 0
 }
 
 // IsPrime checks if the given number is prime.
@@ -106,14 +117,13 @@ func IsLessThan[T Number](lessThan T) FilterFn[T] {
 	}
 }
 
-// IsMultipleOf returns a FilterFn[int] that checks if a given number is a multiple of the specified multiplyer.
+// IsMultipleOf checks if a number is a multiple of the given multiplier.
 //
 // Parameters:
-//   - number: an integer representing the number to be checked.
-//   - multiplyer: an integer representing the number to check if it is a multiple of.
+// - multiplyer: the value to multiply the number by.
 //
-// Returns:
-//   - FilterFn[int]: a function that takes an integer as input and returns a boolean indicating if it is a multiple of the multiplyer.
+// Return type:
+// - FilterFn[T]: a function that takes a number of type T and returns a boolean value.
 func IsMultipleOf[T Number](multiplyer T) FilterFn[T] {
 	return func(number T) bool {
 		return math.Mod(float64(number), float64(multiplyer)) == 0
@@ -132,6 +142,46 @@ func Filter[T Number](numbers []T, filterFn FilterFn[T]) (filteredNumbers []T) {
 		if filterFn(T(number)) {
 			// If the number passes the filter, add it to the filteredNumbers list.
 			filteredNumbers = append(filteredNumbers, number)
+		}
+	}
+	return
+}
+
+func FilterAll[T Number](numbers []T, filterFn ...FilterFn[T]) (filteredNumbers []T) {
+	var valid = false
+numLoop:
+	for _, num := range numbers {
+		var tmpNum T
+		valid = false
+		for _, fn := range filterFn {
+			if !fn(num) {
+				continue numLoop
+			}
+			valid = true
+			tmpNum = num
+		}
+		if valid {
+			filteredNumbers = append(filteredNumbers, tmpNum)
+		}
+	}
+	return
+}
+
+func FilterAny[T Number](numbers []T, filterFn ...FilterFn[T]) (filteredNumbers []T) {
+	var valid = false
+	for _, num := range numbers {
+		var tmpNum T
+		valid = false
+	filterLoop:
+		for _, fn := range filterFn {
+			if fn(num) {
+				valid = true
+				tmpNum = num
+				break filterLoop
+			}
+		}
+		if valid {
+			filteredNumbers = append(filteredNumbers, tmpNum)
 		}
 	}
 	return

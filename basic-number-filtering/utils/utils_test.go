@@ -78,7 +78,7 @@ func TestIsOdd(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := utils.IsOdd(tt.number); got != tt.want {
-				t.Errorf("IsOdd() = %v, want %v", got, tt.want)
+				t.Errorf("IsOdd(%v) = %v, want %v", tt.number, got, tt.want)
 			}
 		})
 	}
