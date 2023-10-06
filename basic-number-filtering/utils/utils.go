@@ -12,7 +12,7 @@ type Number interface {
 	constraints.Integer | constraints.Float
 }
 
-type FilterFn func(number int) bool
+type FilterFn[T Number] func(number T) bool
 
 // ExtractNumbers extracts numbers from a comma-separated string.
 //
@@ -81,11 +81,11 @@ func IsPrime(number int) bool {
 // numbers: The list of numbers to be filtered.
 // filterFn: The filter function that determines whether a number should be included in the filtered list.
 // filteredNumbers: The list of numbers that pass the filter.
-func Filter(numbers []int, filterFn FilterFn) (filteredNumbers []int) {
+func Filter[T Number](numbers []int, filterFn FilterFn[T]) (filteredNumbers []int) {
 	// Iterate over each number in the numbers list.
 	for _, number := range numbers {
 		// Check if the number passes the filter function.
-		if filterFn(number) {
+		if filterFn(T(number)) {
 			// If the number passes the filter, add it to the filteredNumbers list.
 			filteredNumbers = append(filteredNumbers, number)
 		}
