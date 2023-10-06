@@ -1,0 +1,4 @@
+[submodule "student-grading-problem"]
+	path = student-grading-problem
+	url = git@github.com:bouroo/student-grading-go.git
+	branch = main
