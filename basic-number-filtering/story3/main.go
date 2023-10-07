@@ -13,26 +13,28 @@ func main() {
 	MainIO(os.Stdin, os.Stdout)
 }
 
+// MainIO function takes an input reader and an output writer as parameters.
 func MainIO(input io.Reader, output io.Writer) {
-	// Prompt the user for input
+	// Print the prompt for sample input.
 	fmt.Print("Sample Input: ")
 
-	// Create a new scanner to read input from the user
+	// Create a scanner to read the input.
 	inputScanner := bufio.NewScanner(input)
+	// Scan the input and store it as a string.
 	inputScanner.Scan()
 
-	// Extract the numbers from the input using a utility function
+	// Extract the integers from the input string using the `ExtractIntegers` function from the `utils` package.
 	numbers := utils.ExtractIntegers(inputScanner.Text())
 
-	// Filter the numbers by keeping only the prime ones using a utility function
+	// Filter the numbers and keep only the prime numbers using the `Filter` function from the `utils` package.
 	result := utils.Filter(numbers, utils.IsPrime)
 
-	// Create a buffered writer to write the output
+	// Create a writer to write the output.
 	outputWriter := bufio.NewWriter(output)
 
-	// Flush the buffered writer to ensure all data is written to the output
+	// Schedule the flushing of the writer at the end of the function execution.
 	defer outputWriter.Flush()
 
-	// Write the output header and output string
+	// Write the sample output to the writer, combining it with the result converted to a string using the `OutputString` function from the `utils` package.
 	outputWriter.WriteString("Sample Output: " + utils.OutputString(result) + "\n")
 }

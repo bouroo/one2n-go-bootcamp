@@ -13,26 +13,27 @@ func main() {
 	MainIO(os.Stdin, os.Stdout)
 }
 
+// MainIO function takes an input reader and an output writer as parameters.
 func MainIO(input io.Reader, output io.Writer) {
-	// Prompt the user for input
+	// Prompt user for input
 	fmt.Print("Sample Input: ")
 
-	// Create a new scanner to read input from the user
+	// Create a scanner to read the input
 	inputScanner := bufio.NewScanner(input)
 	inputScanner.Scan()
 
-	// Extract the numbers from the input using a utility function
+	// Extract integers from the input string
 	numbers := utils.ExtractIntegers(inputScanner.Text())
 
-	// Filter the numbers by keeping only the odd ones using a utility function
+	// Filter the numbers to keep only the odd ones
 	result := utils.Filter(numbers, utils.IsOdd)
 
 	// Create a buffered writer to write the output
 	outputWriter := bufio.NewWriter(output)
 
-	// Flush the buffered writer to ensure all data is written to the output
+	// Make sure the writer is flushed before the function exits
 	defer outputWriter.Flush()
 
-	// Write the output header and output string
+	// Write the sample output to the writer
 	outputWriter.WriteString("Sample Output: " + utils.OutputString(result) + "\n")
 }

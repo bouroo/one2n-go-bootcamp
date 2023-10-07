@@ -13,51 +13,33 @@ func main() {
 	MainIO(os.Stdin, os.Stdout)
 }
 
+// MainIO function takes an input reader and an output writer as parameters.
 func MainIO(input io.Reader, output io.Writer) {
-	// Prompt the user for input
+	// Prompt user for input
 	fmt.Print("Sample Input: ")
 
-	// Create a new scanner to read input from the user
+	// Create a scanner to read input from the reader
 	inputScanner := bufio.NewScanner(input)
 	inputScanner.Scan()
 
-	// Extract the numbers from the input using a utility function
+	// Extract integers from the input text
 	numbers := utils.ExtractIntegers(inputScanner.Text())
 
-	// Filter the numbers by keeping only the odd ones using a utility function
+	// Filter out odd numbers from the list
 	result := utils.Filter(numbers, utils.IsOdd)
 
-	// Filter the numbers by keeping only the multiples of 3 ones using a utility function
-	result = utils.Filter(result, IsMultipleByThree)
+	// Filter out numbers that are not multiples of 3
+	result = utils.Filter(result, utils.IsMultipleOf[int](3))
 
-	// Filter the numbers by keeping only the numbers greater than 10 using a utility function
-	result = utils.Filter(result, IsGreatherThanTen)
+	// Filter out numbers that are not greater than 10
+	result = utils.Filter(result, utils.IsGreaterThan[int](10))
 
-	// Create a buffered writer to write the output
+	// Create a writer to write output to the output writer
 	outputWriter := bufio.NewWriter(output)
 
-	// Flush the buffered writer to ensure all data is written to the output
+	// Make sure the writer is flushed at the end
 	defer outputWriter.Flush()
 
-	// Write the output header and output string
+	// Write the sample output to the output writer
 	outputWriter.WriteString("Sample Output: " + utils.OutputString(result) + "\n")
-}
-
-// IsMultipleByThree checks if a given number is a multiple of three.
-//
-// Parameters:
-// - number: an integer number to be checked.
-//
-// Returns:
-// - a boolean value indicating whether the number is a multiple of three.
-func IsMultipleByThree(number int) bool {
-	return number%3 == 0
-}
-
-// IsGreatherThanTen checks if the given number is greater than ten.
-//
-// number: an integer to be checked.
-// returns: a boolean indicating if the number is greater than ten.
-func IsGreatherThanTen(number int) bool {
-	return number > 10
 }

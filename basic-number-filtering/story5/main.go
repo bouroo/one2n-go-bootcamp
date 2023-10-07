@@ -13,42 +13,30 @@ func main() {
 	MainIO(os.Stdin, os.Stdout)
 }
 
+// MainIO function takes an input reader and an output writer as parameters.
 func MainIO(input io.Reader, output io.Writer) {
-	// Prompt the user for input
+	// Print the prompt for sample input
 	fmt.Print("Sample Input: ")
-
-	// Create a new scanner to read input from the user
+	
+	// Read the input from the reader
 	inputScanner := bufio.NewScanner(input)
 	inputScanner.Scan()
 
-	// Extract the numbers from the input using a utility function
+	// Extract integers from the input text
 	numbers := utils.ExtractIntegers(inputScanner.Text())
 
-	// Filter the numbers by keeping only the even ones using a utility function
+	// Filter the numbers to keep only the even ones
 	result := utils.Filter(numbers, utils.IsEven)
 
-	// Filter the numbers by keeping only the multiples of 5 ones using a utility function
-	result = utils.Filter(result, IsMultipleByFive)
+	// Filter the result further to keep only the numbers that are multiples of 5
+	result = utils.Filter(result, utils.IsMultipleOf[int](5))
 
-	// Create a buffered writer to write the output
+	// Create a buffered writer for the output
 	outputWriter := bufio.NewWriter(output)
 
-	// Flush the buffered writer to ensure all data is written to the output
+	// Make sure the writer is flushed after the function returns
 	defer outputWriter.Flush()
 
-	// Write the output header and output string
+	// Write the sample output to the writer
 	outputWriter.WriteString("Sample Output: " + utils.OutputString(result) + "\n")
-}
-
-// IsMultipleByFive checks if the given number is a multiple of five.
-//
-// Parameters:
-//
-//	number - an integer to check
-//
-// Returns:
-//
-//	bool - true if the number is a multiple of five, false otherwise.
-func IsMultipleByFive(number int) bool {
-	return number%5 == 0
 }

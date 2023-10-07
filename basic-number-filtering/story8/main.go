@@ -16,35 +16,28 @@ func main() {
 	MainIO(os.Stdin, os.Stdout)
 }
 
-// MainIO is a function that takes an input reader and an output writer as parameters.
+// MainIO function takes an input reader and an output writer as parameters.
 func MainIO(input io.Reader, output io.Writer) {
-	// Prompt the user for input
+
 	fmt.Fprint(output, "Sample Input: ")
 
-	// Create a new scanner to read input from the user
 	scanner := bufio.NewScanner(input)
 	scanner.Scan()
 	inputText := scanner.Text()
 
-	// Extract the numbers from the input using a utility function
 	numbers := utils.ExtractIntegers(inputText)
 
-	// Prompt the user for conditions
 	fmt.Fprint(output, "Conditions specified using a set of functions: ")
 	scanner.Scan()
 	conditionsText := scanner.Text()
 
-	// Extract the conditions from the input using a utility function
 	conditions := ExtractConditions[int](conditionsText)
 
-	// Filter the numbers by keeping only the odd ones using a utility function
 	result := utils.FilterAny(numbers, conditions...)
 
-	// Create a buffered writer to write the output
 	writer := bufio.NewWriter(output)
 	defer writer.Flush()
 
-	// Write the output header and output string
 	outputString := "Sample Output: " + utils.OutputString(result) + "\n"
 	writer.WriteString(outputString)
 }
